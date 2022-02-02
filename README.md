@@ -9,6 +9,14 @@ Jsoup爬取Pixiv图片（月榜、受男性欢迎榜、指定用户的插图作�
 
 另外需配置resources下的3个yml文件。
 
+其中：
+
+`crawler_cfg.yml`是对爬虫的配置；
+
+`sftp_cfg.yml`是对发送图片至服务器的配置；
+
+`user_illustrations.yml`是记录下载用户作品进度，格式为`userIllustrations: {'用户id': '最新下载的作品id'}`，执行时将会下载该用户的晚于该作品的新作品。
+
 随后在`Main.main()`中执行方法。
 
 
