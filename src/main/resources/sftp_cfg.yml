@@ -1,0 +1,13 @@
+# 主机ip
+host: 101.42.226.23
+# sftp端口
+port: 22
+# 服务器用户名与密码
+user: ubuntu
+password: Jiumima1870353-
+# 图片本地目录
+srcDir:
+# 图片服务器目录
+dstDir:
+# 上传后是否删除
+delAfterUpload:

@@ -1,19 +1,21 @@
 # SimplePixivCrawler
-Jsoup爬取Pixiv月榜（并上传至服务器）
+Jsoup爬取Pixiv图片（月榜、受男性欢迎榜、指定用户的插图作品）（并上传至服务器）
 
 
 
 ## 用法
 
-修改Main中关键变量，
+浏览器登录Pixiv后将cookie中的`PHPSESSID`拷贝进`src/main/resources/crawler_cfg.yml`的`PHPSESSID`项。
 
-随后执行`Main.main()`。
+另外需配置resources下的3个yml文件。
+
+随后在`Main.main()`中执行方法。
 
 
 
 ## 参考
 
-登陆：
+登录：后测试发现Jsoup的登录并不好用，所以改用手动copy session cookie至yml。
 
 [参考1](https://www.cnblogs.com/fightfordream/p/6421498.html)
 

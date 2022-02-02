@@ -1,20 +1,60 @@
 package org.example;
 
 import com.jcraft.jsch.*;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class SftpService {
     private Session session;
     private Channel channel;
     private ChannelSftp channelSftp;
+    private String host;
+    private int port;
+    private String user;
+    private String password;
+    private String ymlFileName = "sftp_cfg.yml";
+    private String srcDir, dstDir;
+    private boolean delAfterUpload;
 
-    void createChannel(SftpAuthority sftpAuthority) {
+
+    SftpService() {
+        // 从resources/sftp_cfg.yml读取配置项
+        Yaml yaml = new Yaml();
+        File ymlFile = new File(System.getProperty("user.dir") + "/src/main/resources/" + ymlFileName);
+        if (!ymlFile.exists()) {
+            System.err.println(ymlFileName + " is not exists");
+            return;
+        }
+        try (InputStreamReader reader = new InputStreamReader(new FileInputStream(ymlFile), StandardCharsets.UTF_8)) {
+            Map<String, Object> map = yaml.load(reader);
+            host = (String) map.get("host");
+            password = (String) map.get("password");
+            port = (int) map.get("port");
+            user = (String) map.get("user");
+            srcDir = (String) map.get("srcDir");
+            dstDir = (String) map.get("dstDir");
+            delAfterUpload = (boolean) map.get("delAfterUpload");
+            System.out.println("sftp cfg: " + host + " " + port + " " + user + " " + password);
+            System.out.println(srcDir + "->" + dstDir + ", delAfterUpload " + delAfterUpload);
+        } catch (IOException e) {
+            System.err.println("load yml failed");
+            return;
+        }
+    }
+
+    void createChannel() {
         try {
             JSch jsch = new JSch();
-            session = jsch.getSession(sftpAuthority.getUser(), sftpAuthority.getHost(), sftpAuthority.getPort());
-            session.setPassword(sftpAuthority.getPassword());
+            session = jsch.getSession(user, host, port);
+            session.setPassword(password);
             session.setTimeout(10000);
             session.setConfig("StrictHostKeyChecking", "no");
             session.connect();
@@ -35,7 +75,7 @@ public class SftpService {
         }
     }
 
-    boolean uploadFilesFromSrcDir(SftpAuthority sftpAuthority, String srcDir, String dstDir, boolean delAfterUpload) {
+    boolean uploadFilesFromSrcDir() {
         // 检查通道是否正常
         if (channelSftp == null) {
             System.out.println("channelSftp is not created");
@@ -43,7 +83,7 @@ public class SftpService {
         }
 
         if (channelSftp.isClosed()) {
-            createChannel(sftpAuthority);
+            createChannel();
         }
 
         // 检查源目录是否存在
@@ -102,6 +142,6 @@ public class SftpService {
 
     public static void main(String[] args) {
         SftpService demo = new SftpService();
-
+//        System.out.println(System.getProperty("user.dir") + "/src/main/resources/");
     }
 }

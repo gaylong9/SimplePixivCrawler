@@ -1,0 +1,14 @@
+# 保存图片的目录
+filePath:
+# pixiv的账户
+id:
+# pixiv的密码
+password:
+# 图片大小超过阈值则不下载，默认10MB
+threshold:
+# 作品数量超过阈值则不下载，默认10张
+pageCntThreshold:
+# 是否下载R18的作品，默认false
+allowR18:
+# session
+PHPSESSID:
