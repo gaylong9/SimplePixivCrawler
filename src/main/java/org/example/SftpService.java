@@ -78,7 +78,10 @@ public class SftpService {
     boolean uploadFilesFromSrcDir() {
         // 检查通道是否正常
         if (channelSftp == null) {
-            System.out.println("channelSftp is not created");
+            createChannel();
+        }
+        if (channelSftp == null) {
+            System.out.println("channelSftp create failed");
             return false;
         }
 

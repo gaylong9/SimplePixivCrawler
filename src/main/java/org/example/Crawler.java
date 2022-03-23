@@ -333,6 +333,12 @@ public class Crawler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.printf("\ndownloaded %d imgs\n", existFileNames.size() - imgNumOnStart);
+        imgNumOnStart = existFileNames.size();
+        System.out.println("\ndownload failed imgs:\n");
+        for (String failedFileName : downloadFailedFiles) {
+            System.out.println(failedFileName);
+        }
     }
 
     /**
@@ -567,10 +573,12 @@ public class Crawler {
                 return false;
             }
             System.err.println("download failed, file name: " + fileName);
+            downloadFailedFiles.add(fileName);
             e.printStackTrace();
             return true;
         } catch (IOException e) {
             System.err.println("download failed, file name: " + fileName);
+            downloadFailedFiles.add(fileName);
             e.printStackTrace();
             return false;
         }
